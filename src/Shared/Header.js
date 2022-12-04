@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../Contexts/AuthProvider";
 import "./Header.css";
 const Header = () => {
+  const { user, logOut } = useContext(AuthContext);
+  // dark theme
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const toggleTheme = () => {
     if (theme === "light") {
@@ -14,6 +18,14 @@ const Header = () => {
     localStorage.setItem("theme", theme);
     document.body.className = theme;
   }, [theme]);
+
+  // log out
+  const handleSignOut = () => {
+    logOut()
+    .then(()=>{})  
+    .catch(error=>console.error(error))
+  };
+
   return (
     <div
       className={`App ${theme}`}
@@ -64,8 +76,32 @@ const Header = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <Link to={'/login'}>log in</Link>
-          <Link to={'/register'}>Register</Link>
+          {user?.uid ? (
+            <>
+              <p>{user?.displayName}</p>
+              <button
+                onClick={handleSignOut}
+                className="btn btn-active btn-ghost"
+              >
+                Log out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to={"/login"}>log in</Link>
+              <Link to={"/register"}>Register</Link>
+            </>
+          )}
+          {user ? (
+            <img
+              width={40}
+              className="rounded-full"
+              src={user?.photoURL}
+              alt=""
+            />
+          ) : (
+            <FaUser></FaUser>
+          )}
           <label className="swap swap-rotate">
             <input onClick={toggleTheme} type="checkbox" />
 

@@ -1,10 +1,10 @@
-import { GoogleAuthProvider } from "firebase/auth";
+import { GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import { Result } from "postcss";
 import React, { useContext } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../Contexts/AuthProvider";
 const Login = () => {
-  const { user, userSignIn, loginWithGoogle } = useContext(AuthContext);
+  const { user, userSignIn, loginWithGoogle,signInWithGithub } = useContext(AuthContext);
   const handleSignIn = (e) => {
     e.preventDefault();
 
@@ -32,6 +32,21 @@ const Login = () => {
       })
       .catch((error) => console.log(error));
   };
+
+  const handleSignInGithub=()=>{
+    
+const githubProvider = new GithubAuthProvider();
+    signInWithGithub(githubProvider)
+    .then(result=>{
+        const user=result.user
+        console.log(user)
+    })
+    .catch(error=>{
+        const errorMessage=error.errorMessage
+        console.log(errorMessage)
+        console.error(error)
+    })
+  }
   return (
     <>
       <div
@@ -94,7 +109,7 @@ const Login = () => {
               Login with Google
             </button>
             <br />
-            <button className="btn btn-outline ">
+            <button onClick={handleSignInGithub} className="btn btn-outline ">
               <FaGithub
                 style={{
                   width: "20px",
