@@ -19,7 +19,7 @@ export default Main;
         <div >05</div>
         <div class="col-span-3 ...">
           {" "}
-          <Outlet></Outlet>
+          
         </div>
       </div> */
 }

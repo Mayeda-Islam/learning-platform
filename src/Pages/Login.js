@@ -1,9 +1,27 @@
-import React from "react";
-import { FaGoole,FaGithub, FaGoogle } from "react-icons/fa";
-
+import { Result } from "postcss";
+import React, { useContext } from "react";
+import { FaGithub, FaGoogle } from "react-icons/fa";
+import { AuthContext } from "../Contexts/AuthProvider";
 const Login = () => {
+    const {user,userSignIn}=useContext(AuthContext)
+   const handleSignIn=e=>{
+    e.preventDefault()
+    const form=e.target;
+    const email=form.email.value
+    const password=form.password.value;
+    userSignIn(email,password)
+    .then(result=>{
+        const user=result.user
+        form.reset()
+        console.log(user)
+    })
+    .catch(error=>console.error(error))
+   }
+   
+    console.log(user)
   return (
     <>
+      <form onSubmit={handleSignIn}>
       <div style={{ color: "black" }} className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col ">
           <div className="text-center lg:text-left">
@@ -18,6 +36,7 @@ const Login = () => {
                 </label>
                 <input
                   type="text"
+                  name="email"
                   placeholder="email"
                   className="input input-bordered"
                 />
@@ -27,7 +46,8 @@ const Login = () => {
                   <span className="label-text">Password</span>
                 </label>
                 <input
-                  type="text"
+                  type="password"
+                  name="password"
                   placeholder="password"
                   className="input input-bordered"
                 />
@@ -55,6 +75,7 @@ const Login = () => {
         </div>
         
       </div>
+      </form>
 
       
     </>
