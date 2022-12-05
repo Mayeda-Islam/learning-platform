@@ -1,10 +1,16 @@
 import { GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import { Result } from "postcss";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Contexts/AuthProvider";
 const Login = () => {
-  const { user, userSignIn, loginWithGoogle,signInWithGithub } = useContext(AuthContext);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const { user, userSignIn, loginWithGoogle, signInWithGithub } =
+    useContext(AuthContext);
   const handleSignIn = (e) => {
     e.preventDefault();
 
@@ -16,9 +22,14 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         form.reset();
+        navigate(from, { replace: true });
         console.log(user);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log(error);
+        setError(errorMessage);
+      });
   };
 
   console.log(user);
@@ -28,25 +39,30 @@ const Login = () => {
     loginWithGoogle(googleProvider)
       .then((result) => {
         const user = result.user;
+        navigate("/");
         console.log(user);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        const errorMessage = error.message;
+        setError(errorMessage);
+        console.log(error);
+      });
   };
 
-  const handleSignInGithub=()=>{
-    
-const githubProvider = new GithubAuthProvider();
+  const handleSignInGithub = () => {
+    const githubProvider = new GithubAuthProvider();
     signInWithGithub(githubProvider)
-    .then(result=>{
-        const user=result.user
-        console.log(user)
-    })
-    .catch(error=>{
-        const errorMessage=error.errorMessage
-        console.log(errorMessage)
-        console.error(error)
-    })
-  }
+      .then((result) => {
+        const user = result.user;
+        navigate("/");
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        setError(errorMessage);
+        console.error(errorMessage);
+      });
+  };
   return (
     <>
       <div
@@ -70,6 +86,7 @@ const githubProvider = new GithubAuthProvider();
                   name="email"
                   placeholder="email"
                   className="input input-bordered"
+                  required
                 />
               </div>
               <div className="form-control">
@@ -81,7 +98,10 @@ const githubProvider = new GithubAuthProvider();
                   name="password"
                   placeholder="password"
                   className="input input-bordered"
+                  required
                 />
+                <p className="text-error">{error}</p>
+
                 <label className="label">
                   <a href="#" className="label-text-alt link link-hover">
                     Forgot password?
@@ -91,7 +111,10 @@ const githubProvider = new GithubAuthProvider();
               <div className="form-control mt-4">
                 <button className="btn btn-primary">Login</button>
               </div>
-              <div className="form-control "></div>
+              <div >
+
+             <p className=" mt-4">Haven't any account yet?Please <Link to={'/register'} className="link link-hover text-primary">register</Link > first</p>
+              </div>
             </div>
           </form>
           <div className=" card flex-shrink-0 w-full max-w-sm ">

@@ -1,24 +1,32 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Contexts/AuthProvider";
 
 const Register = () => {
-    const {user,signUpWithEmail}=useContext(AuthContext)
-    const handleRegister=e=>{
-        e.preventDefault()
-        const form=e.target
-        const name=form.name.value
-        const email=form.email.value
-        const photoURL=form.photoURL.value
-        const password=form.password.value
-        console.log(email,name,password,photoURL)
-        signUpWithEmail(email,password)
-        .then(result=>{
-            const user=result.user
-            form.reset()
-            console.log(user)
-        })
-        .catch(error=>console.log(error))
-    }
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { user, signUpWithEmail } = useContext(AuthContext);
+  const handleRegister = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const photoURL = form.photoURL.value;
+    const password = form.password.value;
+    console.log(email, name, password, photoURL);
+    signUpWithEmail(email, password)
+      .then((result) => {
+        const user = result.user;
+        form.reset();
+        navigate("/");
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log(error);
+        setError(errorMessage);
+      });
+  };
   return (
     <form onSubmit={handleRegister} className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col ">
@@ -36,6 +44,7 @@ const Register = () => {
                 name="name"
                 placeholder="Full name"
                 className="input input-bordered"
+                required
               />
             </div>
             <div className="form-control">
@@ -47,6 +56,7 @@ const Register = () => {
                 name="photoURL"
                 placeholder="Photo URL"
                 className="input input-bordered"
+                required
               />
             </div>
             <div className="form-control">
@@ -58,6 +68,7 @@ const Register = () => {
                 name="email"
                 placeholder="email"
                 className="input input-bordered"
+                required
               />
             </div>
             <div className="form-control">
@@ -69,16 +80,22 @@ const Register = () => {
                 name="password"
                 placeholder="password"
                 className="input input-bordered"
+                required
               />
-              <label className="label">
-                <a href="#" className="label-text-alt link link-hover">
-                  Forgot password?
-                </a>
-              </label>
+              <p className="text-error">{error}</p>
             </div>
             <div className="form-control mt-6">
-              <button className="btn btn-primary">Login</button>
+              <button className="btn btn-primary">Register</button>
             </div>
+            <label className="label">
+              <p className=" mt-4">
+                Already have an account?Please{" "}
+                <Link to={"/login"} className="link link-hover text-primary">
+                 login
+                </Link>{" "}
+                
+              </p>
+            </label>
           </div>
         </div>
       </div>
