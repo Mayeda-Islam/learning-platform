@@ -18,14 +18,14 @@ const Profile = () => {
     }
     return (
         <div>
-            <div className="hero min-h-screen bg-base-200">
+            <div className="hero bg-transparent text-dark min-h-screen bg-base-200">
     <div className="hero-content flex-col ">
       <div className="text-center lg:text-left">
         <h1 className="text-5xl font-bold">User Profile</h1>
       </div>
-      <form onSubmit={handleUpdateUser} className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+      <form onSubmit={handleUpdateUser} className="card  flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <div className="card-body">
-          <div className="form-control">
+          <div className="form-control bg-transparent text-dark">
             <label className="label">
               <span className="label-text">Name</span>
             </label>

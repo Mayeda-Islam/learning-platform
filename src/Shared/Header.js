@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../Contexts/AuthProvider";
 import "./Header.css";
 const Header = () => {
-  const { user, logOut } = useContext(AuthContext);
+  const { user, logOut, setLoading, loading, setUser } =
+    useContext(AuthContext);
   // dark theme
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const toggleTheme = () => {
@@ -22,8 +23,11 @@ const Header = () => {
   // log out
   const handleSignOut = () => {
     logOut()
-    .then(()=>{})  
-    .catch(error=>console.error(error))
+      .then(() => {
+        setLoading(false);
+        setUser(null);
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -31,7 +35,7 @@ const Header = () => {
       className={`App ${theme}`}
       style={{ backgroundColor: "#feebdf", color: "black" }}
     >
-      <div className="navbar container mx-auto ">
+      <div className="navbar container mx-auto">
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -53,25 +57,34 @@ const Header = () => {
             <ul
               tabIndex={0}
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-            ></ul>
+            >
+              <li>
+              <Link to={"/courses"}>Courses</Link>
+              </li>
+              <li tabIndex={0}>
+              <Link to={"/FAQ"}>FAQ</Link>
+                
+              </li>
+              <li>
+              <Link to={"/blogs"}>Blogs</Link>
+              </li>
+            </ul>
           </div>
           <Link to={"/"} className="btn btn-ghost normal-case text-xl">
-            Tech learning platform
+            T. L. platform
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal p-0">
             <li>
-              <Link to={"/home"}>Home</Link>
+            <Link to={"/courses"}>Courses</Link>
+            </li>
+            <li tabIndex={0}>
+            <Link to={"/FAQ"}>FAQ</Link>
+              
             </li>
             <li>
-              <Link to={"/courses"}>Courses</Link>
-            </li>
-            <li>
-              <Link to={"/FAQ"}>FAQ</Link>
-            </li>
-            <li>
-              <Link to={"/blogs"}>Blogs</Link>
+            <Link to={"/blogs"}>Blogs</Link>
             </li>
           </ul>
         </div>
@@ -92,16 +105,18 @@ const Header = () => {
               <Link to={"/register"}>Register</Link>
             </>
           )}
-          <Link to={'/profile'}>{user ? (
-            <img
-              width={40}
-              className="rounded-full"
-              src={user?.photoURL}
-              alt=""
-            />
-          ) : (
-            <FaUser></FaUser>
-          )}</Link>
+          <Link to={"/profile"}>
+            {user ? (
+              <img
+                width={40}
+                className="rounded-full"
+                src={user?.photoURL}
+                alt=""
+              />
+            ) : (
+              <FaUser></FaUser>
+            )}
+          </Link>
           <label className="swap swap-rotate">
             <input onClick={toggleTheme} type="checkbox" />
 

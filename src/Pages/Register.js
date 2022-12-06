@@ -5,7 +5,8 @@ import { AuthContext } from "../Contexts/AuthProvider";
 const Register = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { user, signUpWithEmail ,setLoading,updateUser} = useContext(AuthContext);
+  const { user, signUpWithEmail, setLoading, updateUser, verifyEmail } =
+    useContext(AuthContext);
   const handleRegister = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -19,8 +20,10 @@ const Register = () => {
         const user = result.user;
         form.reset();
         navigate("/");
-        setLoading(false)
-        
+        setLoading(false);
+        verifyEmail()
+          .then(() => console.log("email verify"))
+          .catch((error) => console.error(error));
         console.log(user);
       })
       .catch((error) => {
@@ -30,7 +33,10 @@ const Register = () => {
       });
   };
   return (
-    <form onSubmit={handleRegister} className="hero min-h-screen bg-base-200">
+    <form
+      onSubmit={handleRegister}
+      className="hero bg-transparent min-h-screen bg-base-200"
+    >
       <div className="hero-content flex-col ">
         <div className="text-center lg:text-left">
           <h1 className="text-5xl font-bold"> Please Register First</h1>
@@ -90,12 +96,15 @@ const Register = () => {
               <button className="btn btn-primary">Register</button>
             </div>
             <label className="label">
-              <p className=" mt-4">
+              <p className="label text-amber-600 mt-4">
                 Already have an account?Please{" "}
-                <Link to={"/login"} className="link link-hover text-primary">
-                 login
+                <Link
+                  to={"/login"}
+                  className="link label link-hover text-primary"
+                >
+                  login
                 </Link>{" "}
-                
+                first
               </p>
             </label>
           </div>

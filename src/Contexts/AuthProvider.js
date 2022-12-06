@@ -8,6 +8,7 @@ import {
   signOut,
   sendPasswordResetEmail,
   updateProfile,
+  sendEmailVerification,
 } from "firebase/auth";
 import app from "../firebase/firebase.init";
 
@@ -57,7 +58,10 @@ const updateUser=(name,photo)=>{
     // ...
   });
 }
-
+ // verify email
+ const verifyEmail=()=>{
+  return sendEmailVerification(auth.currentUser)
+}
   // observer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -65,15 +69,17 @@ const updateUser=(name,photo)=>{
       setUser(currentUser)
     });
     return unsubscribe();
-  }, []);
+  }, [loading]);
 
   const userInfo = {
     user,
+    setUser,
     signUpWithEmail,
     userSignIn,
     loginWithGoogle,
     signInWithGithub,
     logOut,
+    verifyEmail,
     setLoading,loading,resetPassword,updateUser
   };
   return (

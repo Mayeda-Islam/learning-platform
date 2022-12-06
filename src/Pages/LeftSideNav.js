@@ -9,9 +9,9 @@ const LeftSideNav = () => {
         .then(data=>setCourseCategory(data))
     },[])
     return (
-        <div>
+        <div className='mt-5'>
             {
-        courseCategory.map(category=><p key={category.id} category={category}>
+        courseCategory.map(category=><p className='mt-5 font-bold active:bg-red-400' key={category.id} category={category}>
             <Link to={`/category/${category.id}`}>{category.name}</Link>
         </p>)
      }

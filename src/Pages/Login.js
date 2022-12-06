@@ -1,17 +1,25 @@
 import { GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import { Result } from "postcss";
 import React, { useContext, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Contexts/AuthProvider";
 const Login = () => {
-  const emailRef=useRef()
+  const emailRef = useRef();
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  const { user, userSignIn, loginWithGoogle, signInWithGithub,setLoading ,resetPassword} =
-    useContext(AuthContext);
+  const {
+    user,
+    userSignIn,
+    loginWithGoogle,
+    setUser,
+    signInWithGithub,
+    setLoading,
+    resetPassword,
+  } = useContext(AuthContext);
   const handleSignIn = (e) => {
     e.preventDefault();
 
@@ -22,19 +30,27 @@ const Login = () => {
     userSignIn(email, password)
       .then((result) => {
         const user = result.user;
-        form.reset();
-        navigate(from, { replace: true });
         console.log(user);
+        if (user.emailVerified) {
+          navigate(from, { replace: true });
+        } else {
+          console.log('first')
+          toast.error("Please verify your email first")
+        }
+        form.reset();
+        
       })
       .catch((error) => {
         const errorMessage = error.message;
         console.log(error);
         setError(errorMessage);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-     
   };
 
-  console.log(user);
+ 
   //    log in with google
   const handleLogInGoogle = () => {
     const googleProvider = new GoogleAuthProvider();
@@ -42,7 +58,7 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         navigate("/");
-        
+
         console.log(user);
       })
       .catch((error) => {
@@ -65,38 +81,35 @@ const Login = () => {
         setError(errorMessage);
         console.error(errorMessage);
       })
-      .finally(()=>{
-        setLoading(false)
-      })
+      
   };
   // password reset
-  const handleResetPassword=()=>{
-    const email=emailRef.current.value
+  const handleResetPassword = () => {
+    const email = emailRef.current.value;
     resetPassword(email)
-    .then(() => {
-      console.log('email sent')
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      console.log(error)
-      const errorMessage = error.message;
-      // ..
-    })
-   }
+      .then(() => {
+        console.log("email sent");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        console.log(error);
+        const errorMessage = error.message;
+        // ..
+      });
+  };
   return (
     <>
       <div
         onSubmit={handleSignIn}
-        style={{ color: "black" }}
-        className="hero min-h-screen bg-base-200"
+        className="hero bg-transparent min-h-screen "
       >
         <div className="hero-content flex-col ">
-          <div className="text-center lg:text-left">
+          <div className="text-center  bg-transparent   lg:text-left">
             <h1 className="text-5xl font-bold">Please Login First!</h1>
             <p className="py-6">Provident cupiditate voluptatem et in.</p>
           </div>
-          <form className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <div className="card-body">
+          <form className="card  flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            <div className="card-body ">
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
@@ -104,7 +117,7 @@ const Login = () => {
                 <input
                   type="text"
                   name="email"
-                 ref= {emailRef}
+                  ref={emailRef}
                   placeholder="email"
                   className="input input-bordered"
                   required
@@ -124,7 +137,10 @@ const Login = () => {
                 <p className="text-error">{error}</p>
 
                 <label className="label">
-                  <button onClick={handleResetPassword}  className="label-text-alt link link-hover">
+                  <button
+                    onClick={handleResetPassword}
+                    className="label-text-alt link link-hover"
+                  >
                     Forgot password?
                   </button>
                 </label>
@@ -132,16 +148,24 @@ const Login = () => {
               <div className="form-control mt-4">
                 <button className="btn btn-primary">Login</button>
               </div>
-              <div >
-
-             <p className=" mt-4">Haven't any account yet?Please <Link to={'/register'} className="link link-hover text-primary">register</Link > first</p>
+              <div>
+                <p className="label text-amber-600 mt-4">
+                  Haven't any account yet?Please{" "}
+                  <Link
+                    to={"/register"}
+                    className="link label link-hover text-primary"
+                  >
+                    register
+                  </Link>{" "}
+                  first
+                </p>
               </div>
             </div>
           </form>
           <div className=" card flex-shrink-0 w-full max-w-sm ">
             <button
               onClick={handleLogInGoogle}
-              className="btn btn-outline btn-accent"
+              className="btn btn-outline btn-accent "
             >
               <FaGoogle
                 style={{
@@ -153,7 +177,10 @@ const Login = () => {
               Login with Google
             </button>
             <br />
-            <button onClick={handleSignInGithub} className="btn btn-outline ">
+            <button
+              onClick={handleSignInGithub}
+              className="btn btn-outline bg-base-100"
+            >
               <FaGithub
                 style={{
                   width: "20px",
