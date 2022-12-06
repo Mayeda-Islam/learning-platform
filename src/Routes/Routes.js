@@ -2,6 +2,7 @@ import { async } from "@firebase/util";
 import React, { Children } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "../Layout/Main";
+import Profile from "../Others/Profile";
 import Blogs from "../Pages/Blogs";
 import CheckOut from "../Pages/CheckOut";
 import Courses from "../Pages/Courses";
@@ -46,6 +47,7 @@ export const routes = createBrowserRouter([
           return fetch(`http://localhost:5000/courses/${params.id}`);
         },
       },
+      {path:'/profile',element:<PrivateRoute><Profile></Profile></PrivateRoute>},
       { path: "*", element: <NotFound></NotFound> },
     ],
   },

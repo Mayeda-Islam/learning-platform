@@ -9,7 +9,7 @@ const PrivateRoute = ({children}) => {
         return <button className="btn btn-square mt-5 loading grid mx-auto"></button>
       }
     if(!user){
-        return <Navigate to={'/login'} state={{from:location}} replace></Navigate>
+        return <Navigate to="/login" state={{ from: location }} replace />
     }
     return children
 };

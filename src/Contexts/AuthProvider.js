@@ -6,6 +6,8 @@ import {
   signInWithPopup,
   onAuthStateChanged,
   signOut,
+  sendPasswordResetEmail,
+  updateProfile,
 } from "firebase/auth";
 import app from "../firebase/firebase.init";
 
@@ -39,6 +41,22 @@ const logOut=()=>{
   setLoading(true)
     return signOut(auth)
 }
+// reset password
+const resetPassword=(email)=>{
+  return sendPasswordResetEmail(auth,email)
+}
+// update user
+const updateUser=(name,photo)=>{
+  return updateProfile(auth.currentUser, {
+    displayName: name, photoURL:photo
+  }).then(() => {
+    // Profile updated!
+    // ...
+  }).catch((error) => {
+    // An error occurred
+    // ...
+  });
+}
 
   // observer
   useEffect(() => {
@@ -56,7 +74,7 @@ const logOut=()=>{
     loginWithGoogle,
     signInWithGithub,
     logOut,
-    setLoading,loading
+    setLoading,loading,resetPassword,updateUser
   };
   return (
     <AuthContext.Provider value={userInfo}>{children}</AuthContext.Provider>

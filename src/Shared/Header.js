@@ -92,7 +92,7 @@ const Header = () => {
               <Link to={"/register"}>Register</Link>
             </>
           )}
-          {user ? (
+          <Link to={'/profile'}>{user ? (
             <img
               width={40}
               className="rounded-full"
@@ -101,7 +101,7 @@ const Header = () => {
             />
           ) : (
             <FaUser></FaUser>
-          )}
+          )}</Link>
           <label className="swap swap-rotate">
             <input onClick={toggleTheme} type="checkbox" />
 

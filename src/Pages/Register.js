@@ -5,7 +5,7 @@ import { AuthContext } from "../Contexts/AuthProvider";
 const Register = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { user, signUpWithEmail ,setLoading} = useContext(AuthContext);
+  const { user, signUpWithEmail ,setLoading,updateUser} = useContext(AuthContext);
   const handleRegister = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -20,6 +20,7 @@ const Register = () => {
         form.reset();
         navigate("/");
         setLoading(false)
+        
         console.log(user);
       })
       .catch((error) => {

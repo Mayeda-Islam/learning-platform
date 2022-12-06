@@ -1,15 +1,16 @@
 import { GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import { Result } from "postcss";
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Contexts/AuthProvider";
 const Login = () => {
+  const emailRef=useRef()
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  const { user, userSignIn, loginWithGoogle, signInWithGithub,setLoading } =
+  const { user, userSignIn, loginWithGoogle, signInWithGithub,setLoading ,resetPassword} =
     useContext(AuthContext);
   const handleSignIn = (e) => {
     e.preventDefault();
@@ -30,6 +31,7 @@ const Login = () => {
         console.log(error);
         setError(errorMessage);
       });
+     
   };
 
   console.log(user);
@@ -67,6 +69,20 @@ const Login = () => {
         setLoading(false)
       })
   };
+  // password reset
+  const handleResetPassword=()=>{
+    const email=emailRef.current.value
+    resetPassword(email)
+    .then(() => {
+      console.log('email sent')
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      console.log(error)
+      const errorMessage = error.message;
+      // ..
+    })
+   }
   return (
     <>
       <div
@@ -88,6 +104,7 @@ const Login = () => {
                 <input
                   type="text"
                   name="email"
+                 ref= {emailRef}
                   placeholder="email"
                   className="input input-bordered"
                   required
@@ -107,9 +124,9 @@ const Login = () => {
                 <p className="text-error">{error}</p>
 
                 <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
+                  <button onClick={handleResetPassword}  className="label-text-alt link link-hover">
                     Forgot password?
-                  </a>
+                  </button>
                 </label>
               </div>
               <div className="form-control mt-4">
