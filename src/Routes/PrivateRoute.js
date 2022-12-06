@@ -4,7 +4,10 @@ import { AuthContext } from '../Contexts/AuthProvider';
 
 const PrivateRoute = ({children}) => {
     const location=useLocation()
-    const {user}=useContext(AuthContext)
+    const {user,loading}=useContext(AuthContext)
+      if(loading){
+        return <button className="btn btn-square mt-5 loading grid mx-auto"></button>
+      }
     if(!user){
         return <Navigate to={'/login'} state={{from:location}} replace></Navigate>
     }

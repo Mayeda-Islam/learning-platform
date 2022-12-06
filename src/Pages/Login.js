@@ -9,7 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  const { user, userSignIn, loginWithGoogle, signInWithGithub } =
+  const { user, userSignIn, loginWithGoogle, signInWithGithub,setLoading } =
     useContext(AuthContext);
   const handleSignIn = (e) => {
     e.preventDefault();
@@ -40,6 +40,7 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         navigate("/");
+        
         console.log(user);
       })
       .catch((error) => {
@@ -61,7 +62,10 @@ const Login = () => {
         const errorMessage = error.message;
         setError(errorMessage);
         console.error(errorMessage);
-      });
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
   };
   return (
     <>
