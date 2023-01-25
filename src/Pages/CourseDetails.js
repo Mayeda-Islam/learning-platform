@@ -12,7 +12,8 @@ const CourseDetails = ({ course }) => {
           <img src={image_url} alt="Shoes" className="rounded-xl" />
         </figure>
         <div className="card-body items-center text-center">
-          <h2 className="card-title">Shoes!</h2>
+          <h2 className="card-title">{title}</h2>
+          <h2 className="card-title">{author.name}</h2>
           <p>If a dog chews shoes whose shoes does he choose?</p>
           <div className="card-actions">
             <Link to={`/checkout/${_id}`}>

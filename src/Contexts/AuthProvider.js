@@ -65,10 +65,11 @@ const updateUser=(name,photo)=>{
   // observer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      
       setLoading(false)  
       setUser(currentUser)
     });
-    return unsubscribe();
+    return ()=> unsubscribe();
   }, [loading]);
 
   const userInfo = {

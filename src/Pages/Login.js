@@ -30,11 +30,9 @@ const Login = () => {
     userSignIn(email, password)
       .then((result) => {
         const user = result.user;
-        console.log(user);
         if (user.emailVerified) {
           navigate(from, { replace: true });
         } else {
-          console.log('first')
           toast.error("Please verify your email first")
         }
         form.reset();

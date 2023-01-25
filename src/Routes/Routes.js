@@ -24,7 +24,7 @@ export const routes = createBrowserRouter([
         path: "/courses",
         element: <Courses></Courses>,
         loader:async()=>{
-          return fetch (`http://localhost:5000/courses/`)
+          return fetch (`https://learning-platform-server-site.vercel.app/courses/`)
         }
       },
       {
@@ -32,7 +32,7 @@ export const routes = createBrowserRouter([
         element: <Courses></Courses>,
         loader: async ({ params }) => {
           console.log(params);
-          return fetch(`http://localhost:5000/course-category/${params.id}`);
+          return fetch(`https://learning-platform-server-site.vercel.app/course-category/${params.id}`);
         },
       },
       { path: "/FAQ", element: <FAQ></FAQ> },
@@ -44,7 +44,7 @@ export const routes = createBrowserRouter([
         element: <PrivateRoute><CheckOut></CheckOut></PrivateRoute>,
         loader: async ({ params }) => {
           console.log(params.id);
-          return fetch(`http://localhost:5000/courses/${params.id}`);
+          return fetch(`https://learning-platform-server-site.vercel.app/courses/${params.id}`);
         },
       },
       {path:'/profile',element:<PrivateRoute><Profile></Profile></PrivateRoute>},

@@ -7,14 +7,14 @@ const Courses = () => {
   const allCourse = useLoaderData();
   console.log(allCourse);
   return (
-    <div className="container mx-auto">
-      <div class="grid  grid-cols-4 gap-4">
-        <div className="mx-auto hidden lg:block">
+    <div className="container h-full mx-auto">
+      <div class="lg:grid pb-44 grid-cols-4 gap-4 flex flex-col ">
+        <div className="mx-auto  lg:block">
           <LeftSideNav></LeftSideNav>
         </div>
         <div class="col-span-3 ...">
           {" "}
-          <div className="grid  grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid pb-32 h-full grid-cols-1 lg:grid-cols-2 gap-4">
             {allCourse.map((course) => (
               <CourseDetails course={course} key={course._id} />
             ))}
